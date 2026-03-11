@@ -16,7 +16,11 @@
 }
 
 /* ── Base ── */
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -33,42 +37,89 @@ body.dark {
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 9999px; }
+::-webkit-scrollbar {
+  width: 6px;
+}
 
-/* ── Map container ── */
-#map-container { width: 100%; height: 100%; }
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #22c55e;
+  border-radius: 9999px;
+}
+
+/* ── Map container — never affected by dark mode ── */
+#map-container,
+#map-container * {
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+#map-container {
+  width: 100%;
+  height: 100%;
+  color-scheme: light;
+}
 
 /* ── Animations ── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes spin-slow { to { transform: rotate(360deg); } }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
 
-.fade-up { animation: fadeUp 0.4s ease both; }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.4s ease both;
+}
 
 /* ── Glass card ── */
 .glass {
   backdrop-filter: blur(12px);
-  background: rgba(255,255,255,0.7);
-  border: 1px solid rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
+
 body.dark .glass {
-  background: rgba(17,26,20,0.75);
-  border-color: rgba(34,197,94,0.15);
+  background: rgba(17, 26, 20, 0.75);
+  border-color: rgba(34, 197, 94, 0.15);
 }
 
 /* ── Marker info window reset ── */
-.gm-style .gm-style-iw-c { padding: 0 !important; border-radius: 12px !important; box-shadow: 0 8px 32px rgba(0,0,0,0.18) !important; }
-.gm-style .gm-style-iw-d { overflow: hidden !important; }
-.gm-style .gm-ui-hover-effect { top: 6px !important; right: 6px !important; }
+.gm-style .gm-style-iw-c {
+  padding: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18) !important;
+}
+
+.gm-style .gm-style-iw-d {
+  overflow: hidden !important;
+}
+
+.gm-style .gm-ui-hover-effect {
+  top: 6px !important;
+  right: 6px !important;
+}
 
 /* ── Input focus ring ── */
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
   ring-width: 2px;
   border-color: #22c55e;
-  box-shadow: 0 0 0 3px rgba(34,197,94,0.25);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
 }

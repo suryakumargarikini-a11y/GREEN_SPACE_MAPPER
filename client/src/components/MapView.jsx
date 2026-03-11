@@ -118,29 +118,23 @@ function RecenterButton({ userLocation }) {
 
 // ── Main MapView ──────────────────────────────────────────────────────────────
 export default function MapView({ spaces, nearbySpaces = [], darkMode, userLocation, selectedSpace, selectedNearby, onMarkerClick, onNearbyMarkerClick }) {
-    const [mapStyle, setMapStyle] = useState('street'); // 'street' or 'satellite'
+    const [mapStyle, setMapStyle] = useState('terrain'); // 'terrain' or 'satellite'
 
     const defaultCenter = userLocation
         ? [userLocation.lat, userLocation.lng]
         : [20.5937, 78.9629]; // India default
 
-    // Tile layers
-    const streetTileLight = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    const streetTileDark = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    // Tile layers — map always uses standard tiles regardless of dark mode
+    const terrainTile = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     const satelliteTile = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
 
-    let currentTileUrl = satelliteTile;
-    let attribution = '&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
-
-    if (mapStyle === 'street') {
-        currentTileUrl = darkMode ? streetTileDark : streetTileLight;
-        attribution = darkMode
-            ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>'
-            : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-    }
+    const currentTileUrl = mapStyle === 'terrain' ? terrainTile : satelliteTile;
+    const attribution = mapStyle === 'terrain'
+        ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        : '&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
 
     return (
-        <div id="map-container" className="w-full h-full relative">
+        <div id="map-container" className="w-full h-full relative" style={{ isolation: 'isolate', filter: 'none' }}>
             <MapContainer
                 center={defaultCenter}
                 zoom={12}
@@ -217,15 +211,15 @@ export default function MapView({ spaces, nearbySpaces = [], darkMode, userLocat
                 ))}
             </MapContainer>
 
-            {/* ── Layer Toggle (Street/Satellite) ── */}
+            {/* ── Layer Toggle (Terrain/Satellite) ── */}
             <div className="absolute top-20 right-4 z-[500] flex flex-col gap-2">
                 <button
-                    onClick={() => setMapStyle('street')}
-                    className={`w-10 h-10 rounded-xl shadow-lg flex items-center justify-center transition-all ${mapStyle === 'street'
+                    onClick={() => setMapStyle('terrain')}
+                    className={`w-10 h-10 rounded-xl shadow-lg flex items-center justify-center transition-all ${mapStyle === 'terrain'
                         ? 'bg-blue-500 text-white ring-2 ring-blue-300'
                         : 'bg-white text-gray-600 hover:bg-gray-50'
                         }`}
-                    title="Street View"
+                    title="Terrain View"
                 >
                     <MapIcon size={18} />
                 </button>
