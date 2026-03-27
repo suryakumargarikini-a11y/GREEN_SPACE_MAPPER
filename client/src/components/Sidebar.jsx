@@ -86,7 +86,8 @@ function NearbyPlaceCard({ place, darkMode, onClick, isSelected }) {
 export default function Sidebar({
     spaces, userLocation, selectedSpace, onSelect,
     activeFilters, onFilterChange, darkMode, onNearbyClick,
-    nearbyPlaces, nearbyLoading, nearbyError, refetchNearby
+    nearbyPlaces, nearbyLoading, nearbyError, refetchNearby,
+    selectedNearby
 }) {
     const [search, setSearch] = useState('');
     const [collapsed, setCollapsed] = useState(false);
@@ -261,7 +262,7 @@ export default function Sidebar({
                                         place={place}
                                         darkMode={darkMode}
                                         onClick={() => onNearbyClick?.(place)}
-                                        isSelected={selectedSpace?.id === place.id}
+                                        isSelected={selectedNearby?.id === place.id}
                                     />
                                 ))}
                             </div>

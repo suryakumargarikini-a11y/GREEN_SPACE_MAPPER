@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, CircleMarker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Trees, X, LocateFixed, Navigation, Map as MapIcon, Satellite } from 'lucide-react';
+import { Trees, X, LocateFixed, Navigation, Map as MapIcon, Satellite, ExternalLink, Navigation2 } from 'lucide-react';
 
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
@@ -234,6 +234,40 @@ export default function MapView({ spaces, nearbySpaces = [], darkMode, userLocat
                     <Satellite size={18} />
                 </button>
             </div>
+
+            {/* ── Floating selected-nearby info panel ── */}
+            {selectedNearby && (
+                <div className="absolute bottom-6 left-4 z-[500] max-w-[280px] bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden animate-fade-up">
+                    <div className="bg-green-500 px-4 py-2.5 flex items-center gap-2">
+                        <span className="text-xl">{selectedNearby.emoji}</span>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-white font-bold text-sm leading-tight truncate">{selectedNearby.name}</p>
+                            <p className="text-green-100 text-xs">{selectedNearby.type}</p>
+                        </div>
+                        {selectedNearby.distKm != null && (
+                            <span className="text-xs text-green-100 font-medium flex-shrink-0">
+                                {selectedNearby.distKm < 1
+                                    ? `${Math.round(selectedNearby.distKm * 1000)} m`
+                                    : `${selectedNearby.distKm.toFixed(1)} km`}
+                            </span>
+                        )}
+                    </div>
+                    <div className="px-4 py-2.5 flex items-center gap-3">
+                        {selectedNearby.openingHours && (
+                            <p className="text-xs text-gray-500 flex-1 truncate">🕐 {selectedNearby.openingHours}</p>
+                        )}
+                        {selectedNearby.website && (
+                            <a href={selectedNearby.website} target="_blank" rel="noopener noreferrer"
+                                className="flex items-center gap-1 text-xs text-green-600 hover:text-green-700 font-medium flex-shrink-0">
+                                <ExternalLink size={11} /> Website
+                            </a>
+                        )}
+                        {!selectedNearby.openingHours && !selectedNearby.website && (
+                            <p className="text-xs text-gray-400">Click the marker for more info</p>
+                        )}
+                    </div>
+                </div>
+            )}
 
         </div>
     );

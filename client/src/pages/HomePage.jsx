@@ -79,6 +79,7 @@ export default function HomePage() {
                 spaces={spaces}
                 userLocation={userLocation}
                 selectedSpace={selectedSpace}
+                selectedNearby={selectedNearby}
                 onSelect={handleAppSpaceClick}
                 activeFilters={activeFilters}
                 onFilterChange={setActiveFilters}
