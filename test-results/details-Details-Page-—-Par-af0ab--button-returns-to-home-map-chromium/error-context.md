@@ -1,0 +1,102 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - link "Green Space Mapper" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - img [ref=e7]
+      - generic [ref=e10]: Green Space Mapper
+    - link "Map" [ref=e11] [cursor=pointer]:
+      - /url: /
+      - img [ref=e12]
+      - text: Map
+    - link "Search" [ref=e14] [cursor=pointer]:
+      - /url: /explore
+      - img [ref=e15]
+      - text: Search
+    - link "Add Space" [ref=e18] [cursor=pointer]:
+      - /url: /add
+      - img [ref=e19]
+      - text: Add Space
+    - button "Toggle dark mode" [ref=e20]:
+      - img [ref=e21]
+  - main [ref=e23]:
+    - generic [ref=e24]:
+      - complementary [ref=e25]:
+        - button [ref=e26]:
+          - img [ref=e27]
+        - generic [ref=e29]:
+          - heading "Green Spaces 4" [level=2] [ref=e30]:
+            - img [ref=e31]
+            - text: Green Spaces
+            - generic [ref=e34]: "4"
+          - generic [ref=e35]:
+            - button "🗺️ Nearby Places" [ref=e36]
+            - button "📌 My Spaces (4)" [active] [ref=e37]
+          - generic [ref=e38]:
+            - img [ref=e39]
+            - textbox "Search spaces..." [ref=e42]
+          - generic [ref=e43]:
+            - button "🛝 Playground" [ref=e44]
+            - button "🚶 Walking Track" [ref=e45]
+            - button "🌸 Garden" [ref=e46]
+            - button "🪑 Benches" [ref=e47]
+            - button "⚽ Sports Area" [ref=e48]
+        - generic [ref=e49]:
+          - button "Lovely Professional University garden" [ref=e50] [cursor=pointer]:
+            - img [ref=e53]
+            - generic [ref=e56]:
+              - heading "Lovely Professional University" [level=4] [ref=e58]
+              - generic [ref=e60]: garden
+          - button "Chengdu Research Base" [ref=e61] [cursor=pointer]:
+            - img [ref=e64]
+            - heading "Chengdu Research Base" [level=4] [ref=e69]
+          - button "Cubbon Park walking track garden" [ref=e70] [cursor=pointer]:
+            - img [ref=e73]
+            - generic [ref=e76]:
+              - heading "Cubbon Park" [level=4] [ref=e78]
+              - generic [ref=e79]:
+                - generic [ref=e80]: walking track
+                - generic [ref=e81]: garden
+          - button "Hyde Park Test" [ref=e82] [cursor=pointer]:
+            - img [ref=e85]
+            - heading "Hyde Park Test" [level=4] [ref=e90]
+      - generic [ref=e92]:
+        - generic [ref=e93]:
+          - generic:
+            - generic:
+              - button [ref=e94] [cursor=pointer]:
+                - img [ref=e95]:
+                  - generic [ref=e97]: 🌿
+              - button [ref=e98] [cursor=pointer]:
+                - img [ref=e99]:
+                  - generic [ref=e101]: 🌿
+              - button [ref=e102] [cursor=pointer]:
+                - img [ref=e103]:
+                  - generic [ref=e105]: 🌿
+              - button [ref=e106] [cursor=pointer]:
+                - img [ref=e107]:
+                  - generic [ref=e109]: 🌿
+          - generic [ref=e110]:
+            - generic [ref=e111]:
+              - button "Zoom in" [ref=e112] [cursor=pointer]: +
+              - button "Zoom out" [ref=e113] [cursor=pointer]: −
+            - generic [ref=e114]:
+              - link "Leaflet" [ref=e115] [cursor=pointer]:
+                - /url: https://leafletjs.com
+                - img [ref=e116]
+                - text: Leaflet
+              - text: "| ©"
+              - link "OpenStreetMap" [ref=e120] [cursor=pointer]:
+                - /url: https://www.openstreetmap.org/copyright
+              - text: contributors
+            - generic [ref=e122]:
+              - textbox "Search any location..." [ref=e123]
+              - button "Clear search" [ref=e124] [cursor=pointer]: ×
+        - generic [ref=e125]:
+          - button "Terrain View" [ref=e126]:
+            - img [ref=e127]
+          - button "Satellite View" [ref=e129]:
+            - img [ref=e130]
+```

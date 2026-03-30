@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { Search, Trees, ChevronLeft, ChevronRight, Loader2, RefreshCw, MapPin, ExternalLink } from 'lucide-react';
 import SpaceCard from './SpaceCard';
-import { useNearbyPlaces } from '../hooks/useNearbyPlaces';
+
 
 const ALL_FACILITIES = [
     { id: 'playground', label: 'Playground', emoji: '🛝' },

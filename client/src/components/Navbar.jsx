@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Leaf, Sun, Moon, Plus, Map } from 'lucide-react';
+import { Leaf, Sun, Moon, Plus, Map, Search } from 'lucide-react';
 
 export default function Navbar({ darkMode, toggleDark }) {
     const { pathname } = useLocation();
@@ -25,7 +25,10 @@ export default function Navbar({ darkMode, toggleDark }) {
 
             {/* Nav links */}
             <NavLink to="/" active={pathname === '/'} dark={darkMode} icon={<Map size={15} />}>
-                Explore
+                Map
+            </NavLink>
+            <NavLink to="/explore" active={pathname === '/explore'} dark={darkMode} icon={<Search size={15} />}>
+                Search
             </NavLink>
             <NavLink to="/add" active={pathname === '/add'} dark={darkMode}
                 icon={<Plus size={15} />}

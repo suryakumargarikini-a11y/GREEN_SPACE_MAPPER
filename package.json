@@ -1,0 +1,26 @@
+{
+  "name": "green-space-mapper",
+  "version": "1.0.0",
+  "description": "A community-driven, full-stack web application that lets users **discover, document and explore local green spaces** — parks, gardens, playgrounds, and urban forests — on an interactive Google Map.",
+  "main": "playwright.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suryakumargarikini-a11y/GREEN_SPACE_MAPPER.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suryakumargarikini-a11y/GREEN_SPACE_MAPPER/issues"
+  },
+  "homepage": "https://github.com/suryakumargarikini-a11y/GREEN_SPACE_MAPPER#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}

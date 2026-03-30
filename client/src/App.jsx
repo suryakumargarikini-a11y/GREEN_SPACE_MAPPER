@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import DetailsPage from './pages/DetailsPage';
 import AddSpacePage from './pages/AddSpacePage';
+import ExplorePage from './pages/ExplorePage';
 
 export default function App() {
   // ── Dark mode (persisted) ───────────────────────────────────────────────
@@ -23,6 +24,7 @@ export default function App() {
         <main className="flex-1 flex flex-col">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/explore" element={<ExplorePage />} />
             <Route path="/add" element={<AddSpacePage />} />
             <Route path="/park/:id" element={<DetailsPage />} />
           </Routes>

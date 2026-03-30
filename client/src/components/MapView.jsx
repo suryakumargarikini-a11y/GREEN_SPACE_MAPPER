@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, CircleMarker, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -117,7 +117,7 @@ function RecenterButton({ userLocation }) {
 }
 
 // ── Main MapView ──────────────────────────────────────────────────────────────
-export default function MapView({ spaces, nearbySpaces = [], darkMode, userLocation, selectedSpace, selectedNearby, onMarkerClick, onNearbyMarkerClick }) {
+export default function MapView({ spaces, nearbySpaces = [], userLocation, selectedSpace, selectedNearby, onMarkerClick, onNearbyMarkerClick }) {
     const [mapStyle, setMapStyle] = useState('terrain'); // 'terrain' or 'satellite'
 
     const defaultCenter = userLocation

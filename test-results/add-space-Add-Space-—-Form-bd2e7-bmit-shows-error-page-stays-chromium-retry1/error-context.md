@@ -1,0 +1,86 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - link "Green Space Mapper" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - img [ref=e7]
+      - generic [ref=e10]: Green Space Mapper
+    - link "Map" [ref=e11] [cursor=pointer]:
+      - /url: /
+      - img [ref=e12]
+      - text: Map
+    - link "Search" [ref=e14] [cursor=pointer]:
+      - /url: /explore
+      - img [ref=e15]
+      - text: Search
+    - link "Add Space" [ref=e18] [cursor=pointer]:
+      - /url: /add
+      - img [ref=e19]
+      - text: Add Space
+    - button "Toggle dark mode" [ref=e20]:
+      - img [ref=e21]
+  - main [ref=e23]:
+    - generic [ref=e25]:
+      - link "Back to Map" [ref=e26] [cursor=pointer]:
+        - /url: /
+        - img [ref=e27]
+        - text: Back to Map
+      - generic [ref=e29]:
+        - generic [ref=e32]:
+          - img [ref=e34]
+          - generic [ref=e37]:
+            - heading "Add Green Space" [level=1] [ref=e38]
+            - paragraph [ref=e39]: Help your community discover nature
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - generic [ref=e43]: Space Name *
+            - textbox "e.g. Central City Park" [ref=e44]
+          - generic [ref=e45]:
+            - generic [ref=e46]:
+              - generic [ref=e47]: Coordinates *
+              - button "Use My Location" [ref=e48]:
+                - img [ref=e49]
+                - text: Use My Location
+            - generic [ref=e52]:
+              - generic [ref=e53]:
+                - generic [ref=e54]: Latitude
+                - spinbutton [ref=e55]
+              - generic [ref=e56]:
+                - generic [ref=e57]: Longitude
+                - spinbutton [ref=e58]
+          - generic [ref=e59]:
+            - generic [ref=e60]: Area Size
+            - textbox "e.g. 5 acres or 2 hectares" [ref=e61]
+          - generic [ref=e62]:
+            - generic [ref=e63]: Description
+            - textbox "Describe this green space..." [ref=e64]
+          - generic [ref=e65]:
+            - generic [ref=e66]: Facilities
+            - generic [ref=e67]:
+              - button "🛝 Playground" [ref=e68]:
+                - img [ref=e69]
+                - text: 🛝 Playground
+              - button "🚶 Walking Track" [ref=e71]:
+                - img [ref=e72]
+                - text: 🚶 Walking Track
+              - button "🌸 Garden" [ref=e74]:
+                - img [ref=e75]
+                - text: 🌸 Garden
+              - button "🪑 Benches" [ref=e77]:
+                - img [ref=e78]
+                - text: 🪑 Benches
+              - button "⚽ Sports Area" [ref=e80]:
+                - img [ref=e81]
+                - text: ⚽ Sports Area
+          - generic [ref=e83]:
+            - generic [ref=e84]: Photo
+            - generic [ref=e85] [cursor=pointer]:
+              - img [ref=e86]
+              - paragraph [ref=e90]: Click to upload photo
+              - paragraph [ref=e91]: JPG, PNG, WEBP up to 10MB
+          - button "Add Green Space" [ref=e92]:
+            - img [ref=e93]
+            - text: Add Green Space
+```
