@@ -1,0 +1,26 @@
+services:
+  # The Node.js Express Backend
+  - type: web
+    name: green-space-express
+    env: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: PORT
+        value: 5000
+
+  # The Python FastAPI Analyzer
+  - type: web
+    name: green-space-analyzer
+    env: python
+    rootDir: analyzer
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SENTINEL_HUB_CLIENT_ID
+        sync: false
+      - key: SENTINEL_HUB_CLIENT_SECRET
+        sync: false

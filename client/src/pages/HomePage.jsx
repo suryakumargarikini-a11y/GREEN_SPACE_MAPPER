@@ -33,7 +33,8 @@ export default function HomePage() {
         setLoading(true);
         setError('');
         try {
-            let url = '/api/spaces';
+            const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+            let url = `${API_BASE}/api/spaces`;
             if (activeFilters.size > 0) {
                 url += `?facilities=${[...activeFilters].join(',')}`;
             }

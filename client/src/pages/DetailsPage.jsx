@@ -100,7 +100,8 @@ export default function DetailsPage() {
     useEffect(() => {
         const load = async () => {
             try {
-                const { data } = await axios.get(`/api/spaces/${id}`);
+                const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+                const { data } = await axios.get(`${API_BASE}/api/spaces/${id}`);
                 setSpace(data);
                 
                 if (data.location) {
@@ -167,7 +168,8 @@ export default function DetailsPage() {
     const handleDelete = async () => {
         setDeleting(true);
         try {
-            await axios.delete(`/api/spaces/${id}`);
+            const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+            await axios.delete(`${API_BASE}/api/spaces/${id}`);
             navigate('/');
         } catch {
             setError('Failed to delete. Please try again.');

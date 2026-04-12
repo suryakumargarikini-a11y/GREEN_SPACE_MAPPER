@@ -99,7 +99,8 @@ export default function AddSpaceForm({ darkMode }) {
             data.append('facilities', JSON.stringify(form.facilities));
             if (imageFile) data.append('image', imageFile);
 
-            await axios.post('/api/spaces', data);
+            const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+            await axios.post(`${API_BASE}/api/spaces`, data);
             navigate('/');
         } catch (err) {
             setError(err.response?.data?.error || 'Failed to save. Please try again.');
