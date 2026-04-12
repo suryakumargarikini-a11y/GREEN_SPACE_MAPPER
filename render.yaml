@@ -8,7 +8,7 @@ services:
     buildCommand: npm install
     startCommand: npm start
     envVars:
-      - key: MONGODB_URI
+      - key: MONGO_URI
         sync: false
       - key: PORT
         value: 5000
@@ -22,7 +22,7 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: SENTINEL_HUB_CLIENT_ID
+      - key: SH_CLIENT_ID
         sync: false
-      - key: SENTINEL_HUB_CLIENT_SECRET
+      - key: SH_CLIENT_SECRET
         sync: false
