@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import DetailsPage from './pages/DetailsPage';
 import AddSpacePage from './pages/AddSpacePage';
 import ExplorePage from './pages/ExplorePage';
+import GreenAnalyzerPage from './pages/GreenAnalyzerPage';
 
 export default function App() {
   // ── Dark mode (persisted) ───────────────────────────────────────────────
@@ -25,6 +26,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/analyzer" element={<GreenAnalyzerPage />} />
             <Route path="/add" element={<AddSpacePage />} />
             <Route path="/park/:id" element={<DetailsPage />} />
           </Routes>

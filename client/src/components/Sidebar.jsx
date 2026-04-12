@@ -36,47 +36,7 @@ function formatDist(km) {
     return km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(1)} km`;
 }
 
-/** Small card for OSM nearby places — different from app SpaceCard */
-function NearbyPlaceCard({ place, darkMode, onClick, isSelected }) {
-    return (
-        <div
-            onClick={onClick}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && onClick()}
-            className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 border
-                ${isSelected
-                    ? darkMode ? 'bg-green-900/50 border-green-500/60' : 'bg-green-50 border-green-400'
-                    : darkMode ? 'border-green-900/30 hover:border-green-700/50 hover:bg-green-900/20'
-                        : 'border-gray-100 hover:border-green-200 hover:bg-gray-50'
-                }`}
-        >
-            {/* Icon circle */}
-            <div className={`w-9 h-9 flex-shrink-0 rounded-full flex items-center justify-center text-lg
-                ${darkMode ? 'bg-green-900/40' : 'bg-green-50'}`}>
-                {place.emoji}
-            </div>
 
-            {/* Text */}
-            <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-1">
-                    <p className={`text-sm font-semibold leading-tight truncate
-                        ${darkMode ? 'text-green-100' : 'text-gray-900'}`}>
-                        {place.name}
-                    </p>
-                    {place.distKm !== null && (
-                        <span className="flex-shrink-0 text-xs text-green-500 font-medium">
-                            {formatDist(place.distKm)}
-                        </span>
-                    )}
-                </div>
-                <p className={`text-[11px] mt-0.5 ${darkMode ? 'text-green-600' : 'text-gray-400'}`}>
-                    {place.type}
-                </p>
-            </div>
-        </div>
-    );
-}
 
 /**
  * Sidebar – Two sections:
@@ -85,13 +45,10 @@ function NearbyPlaceCard({ place, darkMode, onClick, isSelected }) {
  */
 export default function Sidebar({
     spaces, userLocation, selectedSpace, onSelect,
-    activeFilters, onFilterChange, darkMode, onNearbyClick,
-    nearbyPlaces, nearbyLoading, nearbyError, refetchNearby,
-    selectedNearby
+    activeFilters, onFilterChange, darkMode
 }) {
     const [search, setSearch] = useState('');
     const [collapsed, setCollapsed] = useState(false);
-    const [activeTab, setActiveTab] = useState('nearby'); // 'app' | 'nearby'
 
     // ── Filter app spaces by facilities & search ─────────────────────────────
     const filtered = spaces
@@ -99,11 +56,6 @@ export default function Sidebar({
         .filter((s) => search === '' || s.name.toLowerCase().includes(search.toLowerCase()))
         .map((s) => ({ ...s, distKm: haversineKm(userLocation, s.location) }))
         .sort((a, b) => (a.distKm ?? Infinity) - (b.distKm ?? Infinity));
-
-    // ── Filter OSM places by search ───────────────────────────────────────────
-    const filteredNearby = nearbyPlaces.filter((p) =>
-        search === '' || p.name.toLowerCase().includes(search.toLowerCase())
-    );
 
     const toggleFilter = (id) => {
         const next = new Set(activeFilters);
@@ -114,10 +66,6 @@ export default function Sidebar({
     const base = darkMode
         ? 'bg-[#111a14] border-green-900/40 text-green-100'
         : 'bg-white border-gray-100 text-gray-900';
-
-    const tabBase = (active) => active
-        ? darkMode ? 'bg-green-600 text-white shadow-sm' : 'bg-green-500 text-white shadow-sm'
-        : darkMode ? 'text-green-400 hover:bg-green-900/30' : 'text-gray-500 hover:bg-gray-200';
 
     return (
         <aside className={`relative flex flex-col transition-all duration-300 border-r ${base}
@@ -148,23 +96,9 @@ export default function Sidebar({
                             Green Spaces
                             <span className={`ml-auto text-xs font-medium px-2 py-0.5 rounded-full
                                 ${darkMode ? 'bg-green-900/50 text-green-400' : 'bg-green-100 text-green-700'}`}>
-                                {activeTab === 'nearby' ? filteredNearby.length : filtered.length}
+                                {filtered.length}
                             </span>
                         </h2>
-
-                        {/* Tab switcher */}
-                        <div className={`flex gap-1 p-1 rounded-xl mb-3 ${darkMode ? 'bg-green-900/20' : 'bg-gray-100'}`}>
-                            <button
-                                onClick={() => setActiveTab('nearby')}
-                                className={`flex-1 text-xs font-semibold py-1.5 rounded-lg transition-all ${tabBase(activeTab === 'nearby')}`}>
-                                🗺️ Nearby Places
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('app')}
-                                className={`flex-1 text-xs font-semibold py-1.5 rounded-lg transition-all ${tabBase(activeTab === 'app')}`}>
-                                📌 My Spaces ({spaces.length})
-                            </button>
-                        </div>
 
                         {/* Search */}
                         <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm
@@ -180,9 +114,7 @@ export default function Sidebar({
                             />
                         </div>
 
-                        {/* Filter chips — only shown in app tab */}
-                        {activeTab === 'app' && (
-                            <div className="flex flex-wrap gap-1.5 mt-3">
+                        <div className="flex flex-wrap gap-1.5 mt-3">
                                 {ALL_FACILITIES.map((f) => {
                                     const active = activeFilters.has(f.id);
                                     return (
@@ -202,76 +134,9 @@ export default function Sidebar({
                                     </button>
                                 )}
                             </div>
-                        )}
                     </div>
 
-                    {/* ── NEARBY TAB (OSM places) ────────────────────────────── */}
-                    {activeTab === 'nearby' && (
-                        <div className="flex-1 overflow-y-auto px-3 py-3">
-                            {/* Status bar */}
-                            <div className="flex items-center justify-between mb-2">
-                                <p className={`text-[10px] uppercase font-bold tracking-wider
-                                    ${darkMode ? 'text-green-800' : 'text-gray-400'}`}>
-                                    {userLocation ? 'Within 5 km · via OpenStreetMap' : 'Enable location to see nearby places'}
-                                </p>
-                                {userLocation && (
-                                    <button onClick={refetchNearby} title="Refresh"
-                                        className={`p-1 rounded-lg transition-colors ${darkMode ? 'text-green-600 hover:text-green-400' : 'text-gray-400 hover:text-green-600'}`}>
-                                        <RefreshCw size={12} className={nearbyLoading ? 'animate-spin' : ''} />
-                                    </button>
-                                )}
-                            </div>
-
-                            {nearbyLoading && (
-                                <div className="flex items-center gap-2 py-8 justify-center">
-                                    <Loader2 size={20} className="text-green-500 animate-spin" />
-                                    <span className={`text-sm ${darkMode ? 'text-green-600' : 'text-gray-400'}`}>
-                                        Finding nearby green spaces…
-                                    </span>
-                                </div>
-                            )}
-
-                            {nearbyError && !nearbyLoading && (
-                                <div className="text-xs text-red-400 bg-red-100/10 border border-red-400/20 rounded-xl px-3 py-2 mb-2">
-                                    {nearbyError}
-                                </div>
-                            )}
-
-                            {!nearbyLoading && !userLocation && (
-                                <div className="text-center py-12">
-                                    <MapPin size={36} className="mx-auto text-green-300 mb-3" />
-                                    <p className={`text-sm ${darkMode ? 'text-green-600' : 'text-gray-400'}`}>
-                                        Allow location access to discover nearby parks, forests and gardens
-                                    </p>
-                                </div>
-                            )}
-
-                            {!nearbyLoading && userLocation && filteredNearby.length === 0 && (
-                                <div className="text-center py-12">
-                                    <Trees size={36} className="mx-auto text-green-300 mb-3" />
-                                    <p className={`text-sm ${darkMode ? 'text-green-600' : 'text-gray-400'}`}>
-                                        No nearby places found
-                                    </p>
-                                </div>
-                            )}
-
-                            <div className="space-y-1.5">
-                                {filteredNearby.map((place) => (
-                                    <NearbyPlaceCard
-                                        key={place.id}
-                                        place={place}
-                                        darkMode={darkMode}
-                                        onClick={() => onNearbyClick?.(place)}
-                                        isSelected={selectedNearby?.id === place.id}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* ── APP TAB (user-added spaces) ───────────────────────── */}
-                    {activeTab === 'app' && (
-                        <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2">
+                    <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2">
                             {filtered.length === 0 && (
                                 <div className="text-center py-12">
                                     <Trees size={40} className="mx-auto text-green-300 mb-3" />
@@ -294,7 +159,6 @@ export default function Sidebar({
                                 />
                             ))}
                         </div>
-                    )}
                 </>
             )}
         </aside>

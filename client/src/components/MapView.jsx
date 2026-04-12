@@ -36,25 +36,6 @@ function createGreenIcon(isSelected = false) {
     });
 }
 
-// ── Nearby OSM places marker icon ──────────────────────────────────────────────
-function createOsmIcon(emoji, isSelected = false) {
-    const size = isSelected ? 36 : 28;
-    const svg = `
-    <svg width="${size}" height="${size}" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="22" cy="22" r="20" fill="${isSelected ? '#60a5fa' : '#3b82f6'}" 
-              stroke="white" stroke-width="2"
-              ${isSelected ? 'filter="drop-shadow(0 0 8px rgba(96,165,250,0.8))"' : ''}/>
-      <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" 
-            font-size="18" font-family="sans-serif">${emoji}</text>
-    </svg>`;
-    return L.divIcon({
-        html: svg,
-        className: '',
-        iconSize: [size, size],
-        iconAnchor: [size / 2, size / 2],
-        popupAnchor: [0, -size / 2],
-    });
-}
 
 // ── Search Control ─────────────────────────────────────────────────────────────
 function SearchControl() {
@@ -78,19 +59,13 @@ function SearchControl() {
 }
 
 // ── Map pan/zoom controller ───────────────────────────────────────────────────
-function MapController({ selectedSpace, userLocation, selectedNearby }) {
+function MapController({ selectedSpace, userLocation }) {
     const map = useMap();
     useEffect(() => {
         if (selectedSpace?.location) {
             map.flyTo([selectedSpace.location.lat, selectedSpace.location.lng], 15, { duration: 1 });
         }
     }, [selectedSpace, map]);
-
-    useEffect(() => {
-        if (selectedNearby?.location) {
-            map.flyTo([selectedNearby.location.lat, selectedNearby.location.lng], 16, { duration: 1 });
-        }
-    }, [selectedNearby, map]);
 
     useEffect(() => {
         if (userLocation) {
@@ -116,8 +91,7 @@ function RecenterButton({ userLocation }) {
     );
 }
 
-// ── Main MapView ──────────────────────────────────────────────────────────────
-export default function MapView({ spaces, nearbySpaces = [], userLocation, selectedSpace, selectedNearby, onMarkerClick, onNearbyMarkerClick }) {
+export default function MapView({ spaces, userLocation, selectedSpace, onMarkerClick }) {
     const [mapStyle, setMapStyle] = useState('terrain'); // 'terrain' or 'satellite'
 
     const defaultCenter = userLocation
@@ -144,7 +118,7 @@ export default function MapView({ spaces, nearbySpaces = [], userLocation, selec
                 <TileLayer url={currentTileUrl} attribution={attribution} />
 
                 <SearchControl />
-                <MapController selectedSpace={selectedSpace} userLocation={userLocation} selectedNearby={selectedNearby} />
+                <MapController selectedSpace={selectedSpace} userLocation={userLocation} />
                 <RecenterButton userLocation={userLocation} />
 
                 {/* User location marker */}
@@ -191,24 +165,6 @@ export default function MapView({ spaces, nearbySpaces = [], userLocation, selec
                         </Popup>
                     </Marker>
                 ))}
-
-                {/* Nearby OSM places markers */}
-                {nearbySpaces.map((place) => (
-                    <Marker
-                        key={place.id}
-                        position={[place.location.lat, place.location.lng]}
-                        icon={createOsmIcon(place.emoji, selectedNearby?.id === place.id)}
-                        eventHandlers={{ click: () => onNearbyMarkerClick?.(place) }}
-                    >
-                        <Popup className="green-popup">
-                            <div className="px-2 py-1 flex flex-col items-center">
-                                <span className="text-2xl mb-1">{place.emoji}</span>
-                                <h3 className="font-bold text-gray-900 min-w-max text-sm">{place.name}</h3>
-                                <p className="text-xs text-gray-500 font-medium">{place.type}</p>
-                            </div>
-                        </Popup>
-                    </Marker>
-                ))}
             </MapContainer>
 
             {/* ── Layer Toggle (Terrain/Satellite) ── */}
@@ -234,40 +190,6 @@ export default function MapView({ spaces, nearbySpaces = [], userLocation, selec
                     <Satellite size={18} />
                 </button>
             </div>
-
-            {/* ── Floating selected-nearby info panel ── */}
-            {selectedNearby && (
-                <div className="absolute bottom-6 left-4 z-[500] max-w-[280px] bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden animate-fade-up">
-                    <div className="bg-green-500 px-4 py-2.5 flex items-center gap-2">
-                        <span className="text-xl">{selectedNearby.emoji}</span>
-                        <div className="flex-1 min-w-0">
-                            <p className="text-white font-bold text-sm leading-tight truncate">{selectedNearby.name}</p>
-                            <p className="text-green-100 text-xs">{selectedNearby.type}</p>
-                        </div>
-                        {selectedNearby.distKm != null && (
-                            <span className="text-xs text-green-100 font-medium flex-shrink-0">
-                                {selectedNearby.distKm < 1
-                                    ? `${Math.round(selectedNearby.distKm * 1000)} m`
-                                    : `${selectedNearby.distKm.toFixed(1)} km`}
-                            </span>
-                        )}
-                    </div>
-                    <div className="px-4 py-2.5 flex items-center gap-3">
-                        {selectedNearby.openingHours && (
-                            <p className="text-xs text-gray-500 flex-1 truncate">🕐 {selectedNearby.openingHours}</p>
-                        )}
-                        {selectedNearby.website && (
-                            <a href={selectedNearby.website} target="_blank" rel="noopener noreferrer"
-                                className="flex items-center gap-1 text-xs text-green-600 hover:text-green-700 font-medium flex-shrink-0">
-                                <ExternalLink size={11} /> Website
-                            </a>
-                        )}
-                        {!selectedNearby.openingHours && !selectedNearby.website && (
-                            <p className="text-xs text-gray-400">Click the marker for more info</p>
-                        )}
-                    </div>
-                </div>
-            )}
 
         </div>
     );

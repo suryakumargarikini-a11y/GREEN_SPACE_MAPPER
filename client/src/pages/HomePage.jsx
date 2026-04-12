@@ -3,7 +3,6 @@ import axios from 'axios';
 import MapView from '../components/MapView';
 import Sidebar from '../components/Sidebar';
 import { Trees, AlertCircle } from 'lucide-react';
-import { useNearbyPlaces } from '../hooks/useNearbyPlaces';
 
 /**
  * HomePage – main page combining the interactive map and the sidebar.
@@ -15,10 +14,7 @@ export default function HomePage() {
     const [error, setError] = useState('');
     const [userLocation, setUserLocation] = useState(null);
     const [selectedSpace, setSelectedSpace] = useState(null);
-    const [selectedNearby, setSelectedNearby] = useState(null);
     const [activeFilters, setActiveFilters] = useState(new Set());
-
-    const { nearbyPlaces, nearbyLoading, nearbyError, refetchNearby } = useNearbyPlaces(userLocation);
 
     // ── Detect dark mode from body class ────────────────────────────────────
     const [darkMode, setDarkMode] = useState(() =>
@@ -62,14 +58,8 @@ export default function HomePage() {
         }
     }, []);
 
-    const handleNearbyClick = (place) => {
-        setSelectedNearby(place);
-        setSelectedSpace(null);
-    };
-
     const handleAppSpaceClick = (space) => {
         setSelectedSpace(space);
-        setSelectedNearby(null);
     };
 
     return (
@@ -79,16 +69,10 @@ export default function HomePage() {
                 spaces={spaces}
                 userLocation={userLocation}
                 selectedSpace={selectedSpace}
-                selectedNearby={selectedNearby}
                 onSelect={handleAppSpaceClick}
                 activeFilters={activeFilters}
                 onFilterChange={setActiveFilters}
                 darkMode={darkMode}
-                onNearbyClick={handleNearbyClick}
-                nearbyPlaces={nearbyPlaces}
-                nearbyLoading={nearbyLoading}
-                nearbyError={nearbyError}
-                refetchNearby={refetchNearby}
             />
 
             {/* ── Map area ─────────────────────────────────────────────────── */}
@@ -114,13 +98,10 @@ export default function HomePage() {
 
                 <MapView
                     spaces={spaces}
-                    nearbySpaces={nearbyPlaces}
                     darkMode={darkMode}
                     userLocation={userLocation}
                     selectedSpace={selectedSpace}
-                    selectedNearby={selectedNearby}
                     onMarkerClick={handleAppSpaceClick}
-                    onNearbyMarkerClick={handleNearbyClick}
                 />
             </div>
         </div>

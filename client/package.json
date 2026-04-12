@@ -14,11 +14,13 @@
     "@vis.gl/react-google-maps": "^1.7.1",
     "axios": "^1.13.6",
     "leaflet": "^1.9.4",
+    "leaflet-draw": "^1.0.4",
     "leaflet-geosearch": "^4.2.2",
     "lucide-react": "^0.576.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-leaflet": "^5.0.0",
+    "react-leaflet-draw": "^0.21.0",
     "react-router-dom": "^7.13.1",
     "tailwindcss": "^4.2.1"
   },
