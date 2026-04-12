@@ -3,6 +3,7 @@ services:
   - type: web
     name: green-space-express
     env: node
+    plan: free
     rootDir: server
     buildCommand: npm install
     startCommand: npm start
@@ -16,6 +17,7 @@ services:
   - type: web
     name: green-space-analyzer
     env: python
+    plan: free
     rootDir: analyzer
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
