@@ -80,8 +80,8 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
 });
 
-// Start Server Locally or on Render
-if (process.env.NODE_ENV !== 'production' || process.env.RENDER) {
+// Start Server Locally (ignored by Vercel Serverless)
+if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
       console.log(`✅  Server running on port ${PORT}`);
