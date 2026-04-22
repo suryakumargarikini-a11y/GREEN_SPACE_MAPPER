@@ -80,8 +80,13 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
 });
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`✅  Server running on port ${PORT}`);
-});
+// Start Server Locally or on Render
+if (process.env.NODE_ENV !== 'production' || process.env.RENDER) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+      console.log(`✅  Server running on port ${PORT}`);
+  });
+}
+
+// Export strictly for Vercel Serverless compatibility
+module.exports = app;
