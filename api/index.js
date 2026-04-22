@@ -3,8 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const path = require('path');
-const { getSentinelToken, getMapImage } = require('./services/sentinel');
-const { getFallbackData } = require('./services/fallback');
+const { getSentinelToken, getMapImage } = require('../services/sentinel');
+const { getFallbackData } = require('../services/fallback');
+const { getCoordinates } = require('../services/geocoding');
 
 const app = express();
 
@@ -20,9 +21,6 @@ app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev", {
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
-
-const { getCoordinates } = require('./services/geocoding');
-
 app.post('/api/map', async (req, res) => {
   const { placeName } = req.body;
 
@@ -46,7 +44,7 @@ app.post('/api/map', async (req, res) => {
     clearTimeout(timeoutId);
 
     // Phase 3: Assembly (Success)
-    const { generateHeuristics } = require('./services/fallback');
+    const { generateHeuristics } = require('../services/fallback');
     const heuristics = generateHeuristics(); // Statistically mapping to the visual overlay
 
     const liveData = {
@@ -65,19 +63,10 @@ app.post('/api/map', async (req, res) => {
     console.error(`[SYSTEM TRIPPED] Exception fetching data for ${placeName}. Triggering graceful fallback. Reason: ${error.message}`);
     
     // Safety Net: Fallback Mode explicitly builds exactly identical keys
-    const { getFallbackData } = require('./services/fallback');
+    const { getFallbackData } = require('../services/fallback');
     const fallbackData = getFallbackData(placeName, coords);
     return res.json(fallbackData);
   }
-});
-
-// React Static Serving
-// When deployed on Render, 'npm run build' will populate the 'client/dist' directory.
-app.use(express.static(path.join(__dirname, 'client/dist')));
-
-// Catch-all route to serve React index.html for client-side routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
 });
 
 // Start Server Locally (ignored by Vercel Serverless)
