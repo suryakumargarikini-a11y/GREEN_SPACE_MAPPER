@@ -226,41 +226,61 @@ async def analyze_stream(geojson: str, region_name: str = "Selected Region"):
             note = None
 
             try:
-                # Run blocking STAC search + download in executor with timeout
+                # Step 1: Download
+                from services.stac_service import fetch_sentinel2_bands
+                from services.ndvi_service import run_ndvi_pipeline
+                from services.area_service import compute_areas
+                from utils.geojson_utils import vectorize_mask
+
                 result_tuple = await asyncio.wait_for(
                     loop.run_in_executor(
                         None,
-                        _run_real_pipeline,
+                        fetch_sentinel2_bands,
                         norm_geom,
                         bbox,
                     ),
-                    timeout=60.0,  # 60 second timeout for real data
+                    timeout=60.0,  # 60 second timeout for download
                 )
-                areas, overlay_png, green_geojson, note = result_tuple
-                real_success = True
+                red_arr, nir_arr, transform, crs_str = result_tuple
 
-            except asyncio.TimeoutError:
-                print("[WARN] STAC pipeline timed out. Using mock data.")
-            except Exception as exc:
-                print(f"[WARN] Real pipeline failed: {exc}. Using mock data.")
+                if red_arr is None or red_arr.size == 0:
+                    raise RuntimeError("No satellite data could be retrieved for this region.")
 
-            if real_success:
                 yield _sse_event("progress", {
                     "step": 2, "total": 5,
                     "message": "📡 Satellite bands downloaded. Computing NDVI…",
                 })
+
+                # Step 2: Compute NDVI
+                ndvi, green_mask, overlay_png = await loop.run_in_executor(
+                    None, run_ndvi_pipeline, red_arr, nir_arr
+                )
+
                 yield _sse_event("progress", {
                     "step": 3, "total": 5,
                     "message": "🌿 NDVI computed. Measuring green areas…",
                 })
+
+                # Step 3 & 4: Areas and Vectorization
+                areas = await loop.run_in_executor(
+                    None, compute_areas, green_mask, transform, crs_str
+                )
+
                 yield _sse_event("progress", {
                     "step": 4, "total": 5,
                     "message": "🗺️ Vectorising green space mask…",
                 })
+
+                green_geojson = await loop.run_in_executor(
+                    None, vectorize_mask, green_mask, transform, crs_str
+                )
+
                 yield _sse_event("progress", {
                     "step": 5, "total": 5,
                     "message": "✅ Live satellite analysis complete!",
                 })
+
+                real_success = True
 
                 if was_clamped and not note:
                     note = (
@@ -278,7 +298,9 @@ async def analyze_stream(geojson: str, region_name: str = "Selected Region"):
                     "green_mask_geojson": green_geojson,
                     "note": note,
                 }
-            else:
+            except Exception as pipeline_exc:
+                traceback.print_exc()
+                print(f"[WARN] Stream pipeline failed: {pipeline_exc}. Falling back to mock data.")
                 # ── Mock fallback ─────────────────────────────────────────────
                 yield _sse_event("progress", {
                     "step": 2, "total": 5,

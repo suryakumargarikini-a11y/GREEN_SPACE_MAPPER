@@ -1,28 +1,17 @@
+# Render Blueprint
+
 services:
-  # The Node.js Express Backend
   - type: web
-    name: green-space-express
+    name: satellite-analyzer
     env: node
     plan: free
-    rootDir: server
-    buildCommand: npm install
+    branch: main
+    buildCommand: npm install && npm run build
     startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
     envVars:
-      - key: MONGO_URI
+      - key: CLIENT_ID
         sync: false
-      - key: PORT
-        value: 5000
-
-  # The Python FastAPI Analyzer
-  - type: web
-    name: green-space-analyzer
-    env: python
-    plan: free
-    rootDir: analyzer
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
-    envVars:
-      - key: SH_CLIENT_ID
-        sync: false
-      - key: SH_CLIENT_SECRET
+      - key: CLIENT_SECRET
         sync: false
