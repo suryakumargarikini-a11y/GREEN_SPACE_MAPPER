@@ -28,7 +28,7 @@ function App() {
     setData(null);
 
     try {
-      const baseUrl = import.meta.env.VITE_API_URL || '';
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
       const response = await fetch(`${baseUrl}/api/map`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
