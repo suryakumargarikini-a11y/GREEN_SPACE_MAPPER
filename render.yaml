@@ -1,7 +1,8 @@
 services:
   - type: web
-    name: green-space-backend
+    name: green-space-express
     env: node
+    rootDir: .
     buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
