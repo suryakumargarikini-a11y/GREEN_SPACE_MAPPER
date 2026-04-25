@@ -28,7 +28,8 @@ function App() {
     setData(null);
 
     try {
-      const response = await fetch('/api/map', {
+      const baseUrl = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${baseUrl}/api/map`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ placeName: placeName.trim() })
